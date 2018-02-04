@@ -40,10 +40,11 @@ class Home extends Component {
                 <View style={styles.activityIndicatorContainer}>
                     <ActivityIndicator
                         animating={true}
-                        style={[{height: 80}]}
+                        color="steelblue"
                         size="large"
+                        style={{marginBottom:20}}
                     />
-                    <Text style={{textAlign:'center',color:'#888'}}>Loading Users...</Text>
+                    <Text style={{textAlign:'center',color:'steelblue'}}>Loading Users...</Text>
                 </View>
             );
         }
@@ -84,9 +85,9 @@ class Home extends Component {
 };
  
 const mapStateToProps = (state) => ({
-    loading: state.dataReducer.usersLoading,
-    refreshing: state.dataReducer.usersRefreshing,
-    data: state.dataReducer.data
+    loading: state.userReducer.loading,
+    refreshing: state.userReducer.refreshing,
+    data: state.userReducer.data
 });
  
 export default connect(mapStateToProps)(Home);
