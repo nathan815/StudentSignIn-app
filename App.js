@@ -1,58 +1,71 @@
 import React from 'react';
-import { StyleSheet, Text, TextInput, View, Image, Button, Alert } from 'react-native';
+import { 
+  StyleSheet, Text, TextInput, View, Button, Alert, 
+  SectionList, ActivityIndicator
+} from 'react-native';
 
-class Greeting extends React.Component {
+class Navbar extends React.Component {
   render() {
     return (
-      <Text style={this.props.style}>Hello {this.props.name}!</Text>
+      <View style={styles.navbar}>
+        <Text style={styles.navbarTitle}>{this.props.title}</Text>
+      </View>
     );
   }
 }
 
-class BlinkingImage extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {isShowingText:true}
-    setInterval(() => {
-      this.setState(previousState => {
-        return { isShowingText: !previousState.isShowingText };
-      });
-    },500)
-  }
+class Movie extends React.Component {
   render() {
-    let display = this.state.isShowingText ?<Image source={this.props.source} style={this.props.style} /> : null;
-    return display;
+    return (
+      <Text style={styles.item}>
+        <Text style={{fontWeight:'bold'}}>{this.props.title}</Text>
+        <Text style={{fontSize:15}}> Released {this.props.released}</Text>
+      </Text>
+    );
   }
 }
 
-/*<BlinkingImage source={{uri: 'http://today.emich.edu/imgs/story/img10268_story-20170307092704.jpg'}} style={{width:400,height:100}} /> 
-<View style={styles.container}>
-        <Greeting name="Nathan" style={[styles.green,styles.bigBold]}/>
-        <Greeting name="Rich" style={styles.bigBold}/>
-        <Greeting name="Cameron" style={[styles.blue,styles.bigBold]}/>
-
-      </View>
-      */
 export default class App extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      name: ''
-    }
+      loading: true,
+      people: []
+    };
+  }
+  componentDidMount() {
+    fetch('https://facebook.github.io/react-native/movies.json')
+      .then((response) => response.json())
+      .then((responseJson) => {
+        this.setState({
+          people: responseJson.movies,
+          loading: false
+        });
+      })
+      .catch((error) => {
+        Alert.alert(error);
+        console.error(error);
+      });
   }
   render() {
+    if(this.state.loading) {
+      return (
+        <View style={{flex: 1, paddingTop: 50}}>
+          <ActivityIndicator />
+        </View>
+      );
+    }
     return (
-      <View style={{flex:1}}>
-          <TextInput style={{flex:1,padding:10,fontSize:35, textAlign: 'center'}} placeholder="Type some text..." onChangeText={(text) => this.setState({name:text})} />
-          <View style={{flex:1}}>
-            <Button onPress={() => {
-              Alert.alert('HELLO!');
-            }} 
-            title="Tap Here" />
-          </View>
-          <View style={{flex: 3, backgroundColor: 'steelblue', padding: 10 }}>
-            <Text style={{flex:1, fontSize:35, color: 'white', textAlign: 'center'}}>{this.state.name ? 'Reversed: ' + this.state.name.split('').reverse().join('').toUpperCase(): ''}</Text>
-          </View>
+      <View style={styles.container}>
+        <Navbar title="Hello World" />
+        <SectionList
+          sections={[
+            {title: 'All Movies', data: this.state.people}
+          ]}
+          renderItem={({item}) => <Movie title={item.title} released={item.releaseYear} />}
+          renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title}</Text>}
+          keyExtractor={(item, index) => index}
+        />
       </View>
     );
   }
@@ -60,10 +73,18 @@ export default class App extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flex: 1
+  },
+  navbar: {
+    height: 60,
+    backgroundColor: 'steelblue',
+    paddingTop: 25
+  },
+  navbarTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'white',
+    textAlign: 'center'
   },
   blue: {
     color: 'blue'
@@ -74,5 +95,19 @@ const styles = StyleSheet.create({
   bigBold: {
     fontSize: 35,
     fontWeight: 'bold'
-  }
+  },
+  sectionHeader: {
+    paddingTop: 2,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingBottom: 2,
+    fontSize: 14,
+    fontWeight: 'bold',
+    backgroundColor: 'rgba(247,247,247,1.0)',
+  },
+  item: {
+    padding: 10,
+    fontSize: 18,
+    height: 44,
+  },
 });
