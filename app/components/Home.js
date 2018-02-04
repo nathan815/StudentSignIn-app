@@ -1,5 +1,3 @@
-'use strict';
- 
 import React, { Component } from 'react';
 import {
     StyleSheet,
@@ -11,12 +9,10 @@ import {
     StatusBar,
     TouchableOpacity
 } from 'react-native';
+
 import { List, ListItem } from 'react-native-elements';
-
 import { connect } from 'react-redux';
- 
 import * as Actions from '../actions';
-
 import Navbar from './Navbar'
 
 class Home extends Component {
@@ -32,46 +28,56 @@ class Home extends Component {
         this.props.dispatch(Actions.loadUsers());
         this.props.dispatch(Actions.usersRefreshing());
     }
+
+    onClickUser(user) {
+        this.props.navigation.navigate('Details', user);
+    }
  
     render() {
         let content;
         if (this.props.loading) {
-            content = (
-                <View style={styles.activityIndicatorContainer}>
-                    <ActivityIndicator
-                        animating={true}
-                        color="steelblue"
-                        size="large"
-                        style={{marginBottom:20}}
-                    />
-                    <Text style={{textAlign:'center',color:'steelblue',fontSize:15}}>Loading people...</Text>
-                </View>
-            );
+            content = this.renderLoading();
         }
         else {
-            content = (
-                <FlatList data={this.props.data} 
-                          renderItem={({item}) => this.renderItem(item)} 
-                          keyExtractor={(item, index) => index}
-                          onRefresh={this.onRefresh.bind(this)}
-                          refreshing={this.props.refreshing}
-                />
-            );
+            content = this.renderList();
         }
 
         return (
             <View style={styles.container}>
-                <StatusBar barStyle="light-content" />
-                <Navbar title="People" style={{ backgroundColor: 'steelblue' }} />
                 {content}
             </View>
         );
 
     }
+
+    renderLoading() {
+        return (
+            <View style={styles.activityIndicatorContainer}>
+                <ActivityIndicator
+                    animating={true}
+                    color="steelblue"
+                    size="large"
+                    style={{marginBottom:20}}
+                />
+                <Text style={{textAlign:'center',color:'steelblue',fontSize:15}}>Loading people...</Text>
+            </View>
+        );
+    }
+
+    renderList() {
+        return (
+            <FlatList data={this.props.data} 
+                      renderItem={({item}) => this.renderItem(item)} 
+                      keyExtractor={(item, index) => index}
+                      onRefresh={this.onRefresh.bind(this)}
+                      refreshing={this.props.refreshing}
+            />
+        );
+    }
  
     renderItem(item) {
         return (
-            <TouchableOpacity onPress={() => Alert.alert(item.name.first+' '+item.name.last)}>
+            <TouchableOpacity onPress={() => this.onClickUser(item)}>
                 <ListItem
                     roundAvatar
                     title={`${item.name.first} ${item.name.last}`}
