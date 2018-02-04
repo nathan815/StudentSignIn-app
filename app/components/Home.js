@@ -6,14 +6,16 @@ import {
     FlatList,
     View,
     Text,
-    ActivityIndicator, Alert, StatusBar
+    ActivityIndicator, 
+    Alert, 
+    StatusBar,
+    TouchableOpacity
 } from 'react-native';
-import { List, ListItem } from "react-native-elements";
- 
-import { bindActionCreators } from 'redux';
+import { List, ListItem } from 'react-native-elements';
+
 import { connect } from 'react-redux';
  
-import * as Actions from '../actions'; //Import your actions
+import * as Actions from '../actions';
 
 import Navbar from './Navbar'
 
@@ -23,14 +25,12 @@ class Home extends Component {
     }
  
     componentDidMount() {
-        this.props.getData(); //call our action
+        this.props.dispatch(Actions.loadUsers());
     }
 
     onRefresh() {
-        this.props.getData(); 
-        this.props.dispatch({type:'DATA_REFRESHING',refreshing:true});
-
-        //Alert.alert('Refreshing')
+        this.props.dispatch(Actions.loadUsers());
+        this.props.dispatch(Actions.usersRefreshing());
     }
  
     render() {
@@ -41,60 +41,55 @@ class Home extends Component {
                     <ActivityIndicator
                         animating={true}
                         style={[{height: 80}]}
-                        size="small"
+                        size="large"
                     />
+                    <Text style={{textAlign:'center',color:'#888'}}>Loading Users...</Text>
                 </View>
             );
         }
         else {
             content = (
-                <View style={styles.container}>
-                    <StatusBar
-                         backgroundColor="skyblue"
-                         barStyle="light-content"
-                       />
-                    <Navbar title="Instructions" style={{ backgroundColor: 'darkgreen' }} />
-                    <FlatList data={this.props.data} 
-                          renderItem={({item}) => this.renderItem(item)} 
-                          keyExtractor={(item, index) => index}
-                          onRefresh={this.onRefresh.bind(this)}
-                          refreshing={this.props.refreshing}
-                    />
-                </View>
+            <FlatList data={this.props.data} 
+                      renderItem={({item}) => this.renderItem(item)} 
+                      keyExtractor={(item, index) => index}
+                      onRefresh={this.onRefresh.bind(this)}
+                      refreshing={this.props.refreshing}
+                />
             );
         }
-        return content;
+
+        return (
+            <View style={styles.container}>
+                <StatusBar barStyle="light-content" />
+                <Navbar title="People" style={{ backgroundColor: 'steelblue' }} />
+                {content}
+            </View>
+        );
+
     }
  
     renderItem(item) {
         return (
-            <ListItem
-                roundAvatar
-                title={`${item.name.first} ${item.name.last}`}
-                subtitle={item.email}
-                avatar={{ uri: item.picture.thumbnail }}
-                containerStyle={{ borderBottomWidth: 0 }}
-            />
+            <TouchableOpacity onPress={() => Alert.alert(item.name.first+' '+item.name.last)}>
+                <ListItem
+                    roundAvatar
+                    title={`${item.name.first} ${item.name.last}`}
+                    subtitle={item.email}
+                    avatar={{ uri: item.picture.thumbnail }}
+                    containerStyle={{ borderBottomWidth: 0 }}
+                />
+            </TouchableOpacity>
         )
     }
 };
  
 const mapStateToProps = (state) => ({
-    loading: state.dataReducer.loading,
-    refreshing: state.dataReducer.refreshing,
+    loading: state.dataReducer.usersLoading,
+    refreshing: state.dataReducer.usersRefreshing,
     data: state.dataReducer.data
 });
  
-// Doing this merges our actions into the component’s props,
-// while wrapping them in dispatch() so that they immediately dispatch an Action.
-// Just by doing this, we will have access to the actions defined in out actions file (action/home.js)
-const mapDispatchToProps = (dispatch) => {
-    let actions = bindActionCreators(Actions, dispatch);
-    return { ...actions, dispatch };
-};
- 
-//Connect everything
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps)(Home);
  
 var styles = StyleSheet.create({
     activityIndicatorContainer:{
@@ -106,24 +101,5 @@ var styles = StyleSheet.create({
     container: {
         flex:1, 
         backgroundColor: '#F5F5F5'
-    },
-    navbar: {
-        backgroundColor: 'skyblue',
-        height: 20
-    },
-    row:{
-        borderBottomWidth: 1,
-        borderColor: "#ccc",
-        padding: 10
-    },
- 
-    title:{
-        fontSize: 15,
-        fontWeight: "600"
-    },
- 
-    description:{
-        marginTop: 5,
-        fontSize: 14,
     }
 });

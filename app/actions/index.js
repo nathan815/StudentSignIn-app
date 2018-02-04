@@ -1,19 +1,23 @@
-export const DATA_AVAILABLE = 'DATA_AVAILABLE';
-
-//Import the sample data
-import Data from '../instructions.json';
+import API from './../api.js'
  
-export function getData(){
+export function usersRefreshing() {
+    return {
+        type:'USERS_REFRESHING'
+    };
+}
+
+export function doneLoadingUsers(data) {
+    return {
+        type: 'USERS_DONE_LOADING',
+        data: data
+    };
+}
+
+export function loadUsers() {
     return (dispatch) => {
-        fetch('https://randomuser.me/api/?results=10')
-        .then((response) => response.json())
+        API.getUsers(50)
         .then((json) => {
-            console.log(json['results'])
-            dispatch({
-                type: DATA_AVAILABLE, 
-                data: json['results'], 
-                refreshing: false 
-            });
+            dispatch(doneLoadingUsers(json['results']));
         });
  
     };

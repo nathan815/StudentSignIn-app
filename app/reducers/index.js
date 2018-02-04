@@ -1,24 +1,22 @@
 import { combineReducers } from 'redux';
  
-import { DATA_AVAILABLE } from "../actions/" //Import the actions types constant we defined in our actions
+let initialState = { data: [], usersLoading:true, usersRefreshing:false };
  
-let dataState = { data: [], loading:true, refreshing:false };
- 
-const dataReducer = (state = dataState, action) => {
+const dataReducer = (state = initialState, action) => {
     switch (action.type) {
-        case DATA_AVAILABLE:
+        case 'USERS_DONE_LOADING':
             state = {
                 ...state,
                 data: action.data,
-                loading: false,
-                refreshing: false
+                usersLoading: false,
+                usersRefreshing: false
             };
             return state;
             break;
-        case "DATA_REFRESHING":
+        case 'USERS_REFRESHING':
             state = {
                 ...state,
-                refreshing: true
+                usersRefreshing: true
             };
             return state;
         default:
