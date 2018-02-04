@@ -1,0 +1,9 @@
+{
+	"folders":
+	[
+		{
+			"path": "."
+		}
+	],
+    "\\.js$": ["Babel", "JavaScript (Babel)"]
+}
