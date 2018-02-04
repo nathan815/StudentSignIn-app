@@ -44,17 +44,17 @@ class Home extends Component {
                         size="large"
                         style={{marginBottom:20}}
                     />
-                    <Text style={{textAlign:'center',color:'steelblue'}}>Loading Users...</Text>
+                    <Text style={{textAlign:'center',color:'steelblue',fontSize:15}}>Loading people...</Text>
                 </View>
             );
         }
         else {
             content = (
-            <FlatList data={this.props.data} 
-                      renderItem={({item}) => this.renderItem(item)} 
-                      keyExtractor={(item, index) => index}
-                      onRefresh={this.onRefresh.bind(this)}
-                      refreshing={this.props.refreshing}
+                <FlatList data={this.props.data} 
+                          renderItem={({item}) => this.renderItem(item)} 
+                          keyExtractor={(item, index) => index}
+                          onRefresh={this.onRefresh.bind(this)}
+                          refreshing={this.props.refreshing}
                 />
             );
         }
@@ -93,14 +93,14 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps)(Home);
  
 var styles = StyleSheet.create({
+    container: {
+        flex:1, 
+        backgroundColor: '#F5F5F5'
+    },
     activityIndicatorContainer:{
         backgroundColor: "#fff",
         alignItems: 'center',
         justifyContent: 'center',
         flex: 1
-    },
-    container: {
-        flex:1, 
-        backgroundColor: '#F5F5F5'
     }
 });
