@@ -7,17 +7,28 @@ import {
     ActivityIndicator, 
     Alert, 
     StatusBar,
-    TouchableOpacity
+    TouchableOpacity,
+    Button
 } from 'react-native';
 
 import { List, ListItem } from 'react-native-elements';
 import { connect } from 'react-redux';
 import * as Actions from '../actions';
-import Navbar from './Navbar'
 
-class Home extends Component {
+class People extends Component {
     constructor(props) {
         super(props);
+    }
+
+    static navigationOptions = {
+        title: 'People',
+        headerRight: (
+          <Button
+            onPress={() => alert('This is a button!')}
+            title="Settings"
+            color="#fff"
+          />
+        ),
     }
  
     componentDidMount() {
@@ -44,6 +55,7 @@ class Home extends Component {
 
         return (
             <View style={styles.container}>
+                <StatusBar barStyle="light-content" />
                 {content}
             </View>
         );
@@ -55,11 +67,10 @@ class Home extends Component {
             <View style={styles.activityIndicatorContainer}>
                 <ActivityIndicator
                     animating={true}
-                    color="steelblue"
                     size="large"
                     style={{marginBottom:20}}
                 />
-                <Text style={{textAlign:'center',color:'steelblue',fontSize:15}}>Loading people...</Text>
+                <Text style={{textAlign:'center',color:'#999',fontSize:15}}>Loading people...</Text>
             </View>
         );
     }
@@ -96,7 +107,7 @@ const mapStateToProps = (state) => ({
     data: state.userReducer.data
 });
  
-export default connect(mapStateToProps)(Home);
+export default connect(mapStateToProps)(People);
  
 var styles = StyleSheet.create({
     container: {

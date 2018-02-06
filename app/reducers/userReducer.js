@@ -1,23 +1,36 @@
-let initialState = { data: [], loading:true, refreshing:false };
+let initialState = { data: [], loading:true, refreshing:false, users: {} };
  
 export default userReducer = (state = initialState, action) => {
+    let newState = state || {};
     switch (action.type) {
         case 'USERS_DONE_LOADING':
-            state = {
+            newState = {
                 ...state,
                 data: action.data,
                 loading: false,
                 refreshing: false
             };
-            return state;
             break;
         case 'USERS_REFRESHING':
-            state = {
+            newState = {
                 ...state,
                 refreshing: true
             };
-            return state;
-        default:
-            return state;
+            break;
+        case 'USER_COUNTER_ADD_1':
+            let user = state.users[action.id];
+            let counter = user ? user.counter : 0;
+            let userData = {
+                counter: counter + 1
+            };
+            newState = {
+                ...state,
+                users: {
+                    ...state.users,
+                    [action.id]: userData
+                }
+            };
+            break;
     }
+    return newState;
 };

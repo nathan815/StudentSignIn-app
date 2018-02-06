@@ -13,6 +13,13 @@ export function doneLoadingUsers(data) {
     };
 }
 
+export function addOne(id) {
+    return {
+        type: 'USER_COUNTER_ADD_1',
+        id: id
+    };
+}
+
 export function loadUsers() {
     return (dispatch) => {
         API.getUsers(50)

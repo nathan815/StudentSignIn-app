@@ -2,22 +2,45 @@ import React from 'react';
 import { TabNavigator, StackNavigator } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 
-import Home from '../components/Home';
+import People from '../components/People';
 import UserDetail from '../components/UserDetail';
 import Settings from '../components/Settings';
 
-export const PeopleStack = StackNavigator({
-    People: {
-        screen: Home,
-        navigationOptions: {
-            title: 'People'
+const stackNavOptions = {
+    headerStyle: {
+        backgroundColor: '#4FA163',
+    },
+    headerTintColor: '#fff',
+    headerTitleStyle: {
+        fontWeight: 'bold'
+    },
+};
+
+export const PeopleStack = StackNavigator(
+    {
+        People: {
+            screen: People
+        },
+        Details: {
+            screen: UserDetail
         }
     },
-    Details: {
-        screen: UserDetail,
-        navigationOptions: ({ navigation }) => ({
-          title: `${navigation.state.params.name.first.toUpperCase()} ${navigation.state.params.name.last.toUpperCase()}`,
-        }),
+    {
+    initialRouteName: 'People',
+    navigationOptions: {
+      ...stackNavOptions
+    },
+  }
+);
+
+export const SettingsStack = StackNavigator({
+    Settings: {
+        screen: Settings
+    }
+}, 
+{
+    navigationOptions: {
+      ...stackNavOptions
     }
 });
 
@@ -30,10 +53,10 @@ export default Tabs = TabNavigator({
         },
     },
     Settings: {
-        screen: Settings,
+        screen: SettingsStack,
         navigationOptions: {
           tabBarLabel: 'Settings',
           tabBarIcon: ({ tintColor }) => <Icon name="settings" size={35} color={tintColor} />
-        },
+        }
     }
-}); 
+});
