@@ -2,9 +2,9 @@ import React from 'react';
 import { TabNavigator, StackNavigator } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 
-import People from '../components/People';
-import UserDetail from '../components/UserDetail';
-import Settings from '../components/Settings';
+import People from '../screens/People';
+import UserDetail from '../screens/UserDetail';
+import Settings from '../screens/Settings';
 
 const stackNavOptions = {
     headerStyle: {
