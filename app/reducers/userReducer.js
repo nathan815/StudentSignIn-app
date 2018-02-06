@@ -18,9 +18,10 @@ export default userReducer = (state = initialState, action) => {
             };
             break;
         case 'USER_COUNTER_ADD_1':
-            let user = state.users[action.id];
-            let counter = user ? user.counter : 0;
+            let user = state.users[action.id] || {};
+            let counter = user.counter ? user.counter : 0;
             let userData = {
+                ...user.userData,
                 counter: counter + 1
             };
             newState = {

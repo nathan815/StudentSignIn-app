@@ -1,5 +1,8 @@
 import API from './../api.js'
- 
+ /**
+  * Action Creators for Redux dispatching
+  */
+
 export function usersRefreshing() {
     return {
         type:'USERS_REFRESHING'
@@ -25,6 +28,9 @@ export function loadUsers() {
         API.getUsers(50)
         .then((json) => {
             dispatch(doneLoadingUsers(json['results']));
+        })
+        .catch(err => {
+            console.log(err);
         });
  
     };
