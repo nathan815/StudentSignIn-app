@@ -20,15 +20,17 @@ class People extends Component {
         super(props);
     }
 
-    static navigationOptions = {
-        title: 'People',
-        headerRight: (
-          <Button
-            onPress={() => alert('This is a button!')}
-            title="Settings"
-            color="#fff"
-          />
-        ),
+    static navigationOptions = ({ navigation }) => {
+        return {
+            title: 'People',
+            headerRight: (
+              <Button
+                onPress={() => navigation.navigate('Modal')}
+                title="Modal!"
+                color="#fff"
+              />
+            ),
+        }
     }
  
     componentDidMount() {
@@ -109,7 +111,7 @@ const mapStateToProps = (state) => ({
  
 export default connect(mapStateToProps)(People);
  
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
         flex:1, 
         backgroundColor: '#F5F5F5'
