@@ -1,7 +1,7 @@
 import { fetchUsers } from './../api';
 
  /**
-  * Action Creators for Redux dispatching
+  * Action Creators for user
   */
 
 export function usersRefreshing() {

@@ -1,14 +1,19 @@
 import React from 'react';
+import { Button } from 'react-native';
 import { TabNavigator, StackNavigator } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 
-import Home from '../screens/Home';
-import People from '../screens/People';
-import UserDetail from '../screens/UserDetail';
-import Settings from '../screens/Settings';
-import ModalScreen from '../screens/ModalScreen';
+import UserListScreen from './user/screens/UserListScreen';
+import ClassListScreen from './class/screens/ClassListScreen';
+import JoinClassModalScreen from './class/screens/JoinClassModalScreen';
 
-const stackNavOptions = {
+import Home from './screens/Home';
+import People from './screens/People';
+import UserDetail from './screens/UserDetail';
+import Settings from './screens/Settings';
+import ModalScreen from './screens/ModalScreen';
+
+const headerNavOptions = {
     headerStyle: {
         backgroundColor: '#4FA163',
     },
@@ -18,21 +23,26 @@ const stackNavOptions = {
     },
 };
 
-export const HomeStack = StackNavigator({
-    Home: {
-        screen: Home
+const modalNavOptions = {
+    headerLeft: null,
+    gesturesEnabled: false
+};
+
+export const ClassStack = StackNavigator({
+    Class: {
+        screen: ClassListScreen
     }
 }, 
 {
     navigationOptions: {
-      ...stackNavOptions
+      ...headerNavOptions
     }
 });
 
 export const PeopleStack = StackNavigator(
     {
         People: {
-            screen: People
+            screen: UserListScreen
         },
         Details: {
             screen: UserDetail
@@ -41,7 +51,7 @@ export const PeopleStack = StackNavigator(
     {
     initialRouteName: 'People',
     navigationOptions: {
-      ...stackNavOptions
+      ...headerNavOptions
     },
   }
 );
@@ -53,29 +63,26 @@ export const SettingsStack = StackNavigator({
 }, 
 {
     navigationOptions: {
-      ...stackNavOptions
+      ...headerNavOptions
     }
 });
 
 export const Tabs = TabNavigator({
-    Home: {
-        screen: HomeStack,
+    Class: {
+        screen: ClassStack,
         navigationOptions: {
-          tabBarLabel: 'Home',
           tabBarIcon: ({ tintColor }) => <Icon name="home" size={35} color={tintColor} />
         },
     },
     People: {
         screen: PeopleStack,
         navigationOptions: {
-          tabBarLabel: 'People',
           tabBarIcon: ({ tintColor }) => <Icon name="people" size={35} color={tintColor} />
         },
     },
     Settings: {
         screen: SettingsStack,
         navigationOptions: {
-          tabBarLabel: 'Settings',
           tabBarIcon: ({ tintColor }) => <Icon name="settings" size={35} color={tintColor} />
         }
     }
@@ -91,8 +98,15 @@ export default RootStack = StackNavigator({
     Modal: {
         screen: ModalScreen,
         navigationOptions: {
-            headerLeft: null,
-            gesturesEnabled: false
+            ...modalNavOptions,
+            ...headerNavOptions
+        }
+    },
+    JoinClassModal: {
+        screen: JoinClassModalScreen,
+        navigationOptions: {
+            ...modalNavOptions,
+            ...headerNavOptions
         }
     }
 },
